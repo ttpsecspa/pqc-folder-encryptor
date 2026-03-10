@@ -98,11 +98,11 @@ class PQCApp:
         content.pack(fill="both", expand=True, padx=30)
 
         # Mode
-        self._section(content, "MODO DE OPERACION")
+        self._section(content, "OPERATION MODE")
         mode_f = tk.Frame(content, bg=C["bg"])
         mode_f.pack(fill="x", pady=(0, 12))
         self.mode = tk.StringVar(value="encrypt")
-        for val, label in [("encrypt", "Cifrar Carpeta"), ("decrypt", "Descifrar .pqc")]:
+        for val, label in [("encrypt", "Encrypt Folder"), ("decrypt", "Decrypt .pqc")]:
             tk.Radiobutton(
                 mode_f, text=f"  {label}", variable=self.mode, value=val,
                 font=("Segoe UI", 11), bg=C["bg"], fg=C["text"],
@@ -113,11 +113,11 @@ class PQCApp:
             ).pack(side="left", padx=(0, 8))
 
         # Paths
-        self._section(content, "ARCHIVOS")
+        self._section(content, "FILES")
         self.src_var = tk.StringVar()
         self.dst_var = tk.StringVar()
-        self._path_row(content, "Origen", self.src_var, self._browse_src)
-        self._path_row(content, "Destino", self.dst_var, self._browse_dst)
+        self._path_row(content, "Source", self.src_var, self._browse_src)
+        self._path_row(content, "Destination", self.dst_var, self._browse_dst)
         self.info_var = tk.StringVar()
         tk.Label(content, textvariable=self.info_var, font=("Consolas", 9),
                  bg=C["bg"], fg=C["dim"]).pack(anchor="w", pady=(0, 8))
@@ -128,7 +128,7 @@ class PQCApp:
         self.pw2_var = tk.StringVar()
         pw_frame = tk.Frame(content, bg=C["bg"])
         pw_frame.pack(fill="x", pady=(0, 4))
-        tk.Label(pw_frame, text="Clave:", font=("Segoe UI", 9),
+        tk.Label(pw_frame, text="Password:", font=("Segoe UI", 9),
                  bg=C["bg"], fg=C["dim"], width=10, anchor="w").pack(side="left")
         self.pw_entry = tk.Entry(
             pw_frame, textvariable=self.pw_var, show="*",
@@ -144,7 +144,7 @@ class PQCApp:
 
         pw2_frame = tk.Frame(content, bg=C["bg"])
         pw2_frame.pack(fill="x", pady=(0, 12))
-        tk.Label(pw2_frame, text="Confirmar:", font=("Segoe UI", 9),
+        tk.Label(pw2_frame, text="Confirm:", font=("Segoe UI", 9),
                  bg=C["bg"], fg=C["dim"], width=10, anchor="w").pack(side="left")
         self.pw2_entry = tk.Entry(
             pw2_frame, textvariable=self.pw2_var, show="*",
@@ -165,16 +165,16 @@ class PQCApp:
         self.pw_var.trace_add("write", self._update_strength)
 
         # Progress
-        self._section(content, "PROGRESO")
+        self._section(content, "PROGRESS")
         self.prog_var = tk.DoubleVar()
         ttk.Progressbar(content, variable=self.prog_var, maximum=100,
                         style="green.Horizontal.TProgressbar").pack(fill="x", pady=(0, 4), ipady=1)
-        self.status_var = tk.StringVar(value="Esperando configuracion...")
+        self.status_var = tk.StringVar(value="Waiting for configuration...")
         tk.Label(content, textvariable=self.status_var, font=("Consolas", 9),
                  bg=C["bg"], fg=C["accent"]).pack(anchor="w", pady=(0, 8))
 
         # Log
-        self._section(content, "LOG DE OPERACIONES")
+        self._section(content, "OPERATION LOG")
         log_frame = tk.Frame(content, bg=C["border"], bd=1, relief="solid")
         log_frame.pack(fill="both", expand=True, pady=(0, 12))
         self.log = scrolledtext.ScrolledText(
@@ -184,14 +184,14 @@ class PQCApp:
         self.log.pack(fill="both", expand=True)
 
         # Action button
-        ttk.Button(content, text="EJECUTAR", style="Accent.TButton",
+        ttk.Button(content, text="EXECUTE", style="Accent.TButton",
                    command=self._execute).pack(fill="x", pady=(0, 8), ipady=4)
 
         # Footer
         tk.Frame(main, bg=C["border"], height=1).pack(fill="x", padx=30, pady=(0, 8))
         foot = tk.Frame(main, bg=C["bg"])
         foot.pack(fill="x", padx=30, pady=(0, 10))
-        tk.Label(foot, text="TTPSEC SpA  \u2014  Ciberseguridad OT/ICS",
+        tk.Label(foot, text="TTPSEC SpA  \u2014  OT/ICS Cybersecurity",
                  font=("Consolas", 8), bg=C["bg"], fg="#2a3545").pack(side="left")
         tk.Label(foot, text="FIPS 203 \u2022 FIPS 204 \u2022 Post-Quantum Security",
                  font=("Consolas", 8), bg=C["bg"], fg="#2a3545").pack(side="right")
@@ -224,10 +224,10 @@ class PQCApp:
 
     def _browse_src(self) -> None:
         if self.mode.get() == "encrypt":
-            p = filedialog.askdirectory(title="Carpeta a cifrar")
+            p = filedialog.askdirectory(title="Folder to encrypt")
         else:
             p = filedialog.askopenfilename(
-                title="Archivo .pqc", filetypes=[("PQC", "*.pqc"), ("All", "*.*")])
+                title="PQC file", filetypes=[("PQC", "*.pqc"), ("All", "*.*")])
         if p:
             self.src_var.set(p)
             if not self.dst_var.get():
@@ -237,14 +237,14 @@ class PQCApp:
             if self.mode.get() == "encrypt" and Path(p).is_dir():
                 n = sum(1 for f in Path(p).rglob("*") if f.is_file())
                 sz = sum(f.stat().st_size for f in Path(p).rglob("*") if f.is_file())
-                self.info_var.set(f"{n} archivos \u2014 {sz:,} bytes")
+                self.info_var.set(f"{n} files \u2014 {sz:,} bytes")
 
     def _browse_dst(self) -> None:
         if self.mode.get() == "encrypt":
             p = filedialog.asksaveasfilename(
                 defaultextension=".pqc", filetypes=[("PQC", "*.pqc")])
         else:
-            p = filedialog.askdirectory(title="Destino")
+            p = filedialog.askdirectory(title="Destination")
         if p:
             self.dst_var.set(p)
 
@@ -267,7 +267,7 @@ class PQCApp:
         if re.search(r"\d", p): s += 1
         if re.search(r"[^A-Za-z0-9]", p): s += 1
         s = min(s, 5)
-        labels = ["Muy debil", "Debil", "Aceptable", "Buena", "Fuerte", "Excelente"]
+        labels = ["Very weak", "Weak", "Fair", "Good", "Strong", "Excellent"]
         colors = ["#ff1744", "#ff5252", "#ff9800", "#ffeb3b", "#76ff03", C["accent"]]
         w = self.strength_bar.winfo_width()
         self.strength_bar.delete("all")
@@ -294,13 +294,13 @@ class PQCApp:
         pw = self.pw_var.get()
 
         if not src or not dst:
-            messagebox.showerror("TTPSEC", "Seleccione origen y destino")
+            messagebox.showerror("TTPSEC", "Select source and destination")
             return
         if not pw:
-            messagebox.showerror("TTPSEC", "Ingrese passphrase")
+            messagebox.showerror("TTPSEC", "Enter passphrase")
             return
         if self.mode.get() == "encrypt" and pw != self.pw2_var.get():
-            messagebox.showerror("TTPSEC", "Las passphrases no coinciden")
+            messagebox.showerror("TTPSEC", "Passphrases do not match")
             return
 
         self.running = True
@@ -312,16 +312,16 @@ class PQCApp:
                 if self.mode.get() == "encrypt":
                     r = encrypt_folder(src, dst, pw, self._progress)
                     messagebox.showinfo("TTPSEC",
-                        f"Cifrado exitoso\n\n"
-                        f"Archivos:  {r['files']}\n"
-                        f"Entrada:   {r['input_size']:,} bytes\n"
-                        f"Salida:    {r['output_size']:,} bytes\n\n"
+                        f"Encryption successful\n\n"
+                        f"Files:    {r['files']}\n"
+                        f"Input:    {r['input_size']:,} bytes\n"
+                        f"Output:   {r['output_size']:,} bytes\n\n"
                         f"{r['output']}")
                 else:
                     r = decrypt_folder(src, dst, pw, self._progress)
                     messagebox.showinfo("TTPSEC",
-                        f"Descifrado exitoso\n\n"
-                        f"Archivos: {r['files']}\n\n"
+                        f"Decryption successful\n\n"
+                        f"Files: {r['files']}\n\n"
                         f"{r['output_dir']}")
             except PQCError as e:
                 self._log(f"ERROR: {e}")
