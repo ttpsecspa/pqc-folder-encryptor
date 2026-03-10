@@ -131,18 +131,54 @@ Restored folder
 | ... | 12 | AES-GCM nonce |
 | ... | variable | AES-GCM encrypted payload |
 
+## Verify Downloads
+
+Every release includes a `SHA256SUMS.txt` file. Verify the `.exe` integrity:
+
+```powershell
+# PowerShell
+certutil -hashfile PQC-Encryptor.exe SHA256
+```
+
+```bash
+# Linux / Git Bash
+sha256sum -c SHA256SUMS.txt
+```
+
+Compare the output hash with the value in `SHA256SUMS.txt`.
+
+## Testing
+
+```bash
+python tests/test_roundtrip.py
+```
+
+The test creates a folder with various files, encrypts it, decrypts it, and verifies every file matches the original via SHA-256. It also confirms that a wrong passphrase is rejected.
+
 ## Project Structure
 
 ```
 pqc-folder-encryptor/
-├── pqc_encryptor.py      # Main application (GUI + CLI + crypto)
-├── build_exe.bat          # Windows .exe builder script
-├── requirements.txt       # Python dependencies
-├── requirements-dev.txt   # Build dependencies (PyInstaller)
-├── LICENSE                # MIT License
-├── README.md              # This file
-├── SECURITY.md            # Security policy and crypto details
-└── CONTRIBUTING.md        # Contribution guidelines
+├── pqc_encryptor.py              # Main application (GUI + CLI + crypto)
+├── build_exe.bat                  # Windows .exe builder script
+├── requirements.txt               # Python dependencies
+├── requirements-dev.txt           # Build dependencies (PyInstaller)
+├── tests/
+│   └── test_roundtrip.py          # Encrypt/decrypt round-trip test
+├── .github/
+│   ├── workflows/
+│   │   ├── ci.yml                 # CI: test on push/PR
+│   │   └── release.yml            # Build .exe + checksums on tag
+│   ├── ISSUE_TEMPLATE/
+│   │   ├── bug_report.yml         # Bug report template
+│   │   └── feature_request.yml    # Feature request template
+│   └── PULL_REQUEST_TEMPLATE.md   # PR template
+├── LICENSE                        # MIT License
+├── README.md                      # This file
+├── CHANGELOG.md                   # Version history
+├── SECURITY.md                    # Security policy and crypto details
+├── CODE_OF_CONDUCT.md             # Contributor Code of Conduct
+└── CONTRIBUTING.md                # Contribution guidelines
 ```
 
 ## License
