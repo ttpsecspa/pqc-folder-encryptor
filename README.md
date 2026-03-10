@@ -14,6 +14,10 @@
 # PQC Folder Encryptor
 
 Post-quantum cryptography folder encryption tool. Encrypts entire directories into a single `.pqc` file using NIST-standardized post-quantum algorithms.
+https://www.researchgate.net/publication/401719210_Democratizing_Post-Quantum_Cryptography_Design_and_Architecture_of_a_FIPS_203204-Compliant_Folder_Encryption_Tool_for_Non-Technical_Users
+March 2026
+DOI: 10.13140/RG.2.2.30529.01123
+LicenseCC BY 4.0
 
 Built by [TTPSEC SpA](https://ttpsec.cl) - OT/ICS Cybersecurity.
 
