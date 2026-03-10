@@ -1,0 +1,19 @@
+PQC Folder Encryptor
+Copyright (c) 2026 TTPSEC SpA
+
+This software uses post-quantum cryptographic algorithms standardized by NIST:
+  - ML-KEM-768 (FIPS 203) - Module-Lattice-Based Key-Encapsulation Mechanism
+  - ML-DSA-65  (FIPS 204) - Module-Lattice-Based Digital Signature Algorithm
+
+EXPORT CONTROL NOTICE:
+This software contains cryptographic functionality. The country in which you
+currently reside may have restrictions on the import, possession, use, and/or
+re-export to another country, of encryption software. BEFORE using any
+encryption software, please check your country's laws, regulations and policies
+concerning the import, possession, or use, and re-export of encryption software,
+to see if this is permitted. See https://www.wassenaar.org/ for more information.
+
+THIRD-PARTY LIBRARIES:
+  - pqcrypto      (BSD)        - Post-quantum cryptographic primitives
+  - cryptography  (Apache 2.0) - AES-GCM, HKDF
+  - argon2-cffi   (MIT)        - Argon2id password hashing

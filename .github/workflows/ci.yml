@@ -34,5 +34,8 @@ jobs:
           python -c "from cryptography.hazmat.primitives.ciphers.aead import AESGCM; print('AES-GCM OK')"
           python -c "from argon2.low_level import hash_secret_raw; print('Argon2 OK')"
 
+      - name: Run known-answer / regression tests
+        run: python tests/test_vectors.py
+
       - name: Run encrypt/decrypt round-trip test
         run: python tests/test_roundtrip.py
